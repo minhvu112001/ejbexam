@@ -7,38 +7,32 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 
 import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
 public class SuncoSecurityConfig extends WebSecurityConfigurerAdapter {
-       @Autowired
-       @Qualifier("securityDataSource")
-       private DataSource securityDataSource;
+
+    @Autowired
+    @Qualifier("securityDataSource")
+    private DataSource securityDataSource;
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception{
+    protected void configure(AuthenticationManagerBuilder auth)throws Exception{
         auth.jdbcAuthentication().dataSource(securityDataSource);
     }
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception{
-        http.authorizeRequests()
-                .antMatchers("/employees/showForm*").hasAnyRole("MANAGER","ADMIN")
-                .antMatchers("/employees/save*").hasAnyRole("MANAGER","ADMIN")
-                .antMatchers("/employees/**").hasAnyRole("EMPLOYEE","ADMIN","MANAGER")
-                .antMatchers("/employees/delete").hasRole("ADMIN")
-                .antMatchers("/resources/**").permitAll()
+    protected void configure(HttpSecurity httpSecurity)throws Exception{
+        httpSecurity.authorizeRequests()
+                .antMatchers("/api/**").hasRole("ADMIN")
+                .anyRequest().authenticated()
                 .and()
-                .formLogin()
-                    .loginPage("/showMyLoginPage")
-                    .loginProcessingUrl("/authenticateTheUser")
-                    .permitAll()
+                .httpBasic()
                 .and()
-                .logout().permitAll()
-                .and()
-                .exceptionHandling().accessDeniedPage("/access-denied");
-
+                .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 }

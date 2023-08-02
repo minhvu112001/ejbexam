@@ -7,34 +7,24 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "employees")
+@Table(name = "employee")
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Id")
+    @Column(name = "id")
     private int id;
-
-    @Column(name = "first_name")
-    private String firstName;
-
-    @Column(name = "last_name")
-    private String lastName;
-
+    @Column(name = "name")
+    private String name;
     @Column(name = "wage")
-    private BigDecimal wage;
+    private double wage;
 
-
-
-    public Employee(){
-
+    public Employee() {
     }
 
-    public Employee(int id, String firstName, String lastName, BigDecimal wage) {
+    public Employee(int id, String name, double wage) {
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.name = name;
         this.wage = wage;
-
     }
 
     public int getId() {
@@ -45,39 +35,28 @@ public class Employee {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getName() {
+        return name;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public BigDecimal getWage() {
+    public double getWage() {
         return wage;
     }
 
-    public void setWage(BigDecimal wage) {
+    public void setWage(double wage) {
         this.wage = wage;
     }
-
-
 
     @Override
     public String toString() {
         return "Employee{" +
                 "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", wage='" + wage + '\'' +
+                ", name='" + name + '\'' +
+                ", wage=" + wage +
                 '}';
     }
 }
